@@ -38,7 +38,48 @@ router.post('/', async(req, res) => {
 });
 
 router.put('/', async(req, res) => {
-
+    try {
+        let query = [];
+        switch (req.body.field) {
+            case 'club':
+                if (Object.keys(req.body)[1] == 'player') {
+                    query.push(req.body.player);
+                    query.push(req.body.newClub);
+                    update.playersClubField(query);
+                } else if (Object.keys(req.body)[1] == 'doctor') {
+                    query.push(req.body.player);
+                    query.push(req.body.newClub);
+                    update.doctorsClubField(query);
+                }
+                break;
+            case 'player':
+                query.push(req.body.doctor);
+                if (req.body.action == 'add') {
+                    query.push(req.body.player);
+                    update.addPlayerToDoctor(query);
+                } else if (req.body.action == 'delete') {
+                    query.push(req.body.player);
+                    update.deletePlayerFromDoctor(query);
+                }
+                break;
+            case 'doctor':
+                query.push(req.body.player);
+                if (req.body.action == 'add') {
+                    query.push(req.body.doctor);
+                    update.addDoctorToPlayer(query);
+                } else if (req.body.action == 'delete') {
+                    query.push(req.body.doctor);
+                    update.deleteDoctorFromPlayer(query);
+                }
+                break;
+            default:
+                throw new Error('Unavailable entity requested.');
+                break;
+        };
+        res.status(200).send('Operation completed successfully!');
+    } catch (e) {
+        res.status(404);
+    };
 });
 
 router.delete('/', async(req, res) => {
