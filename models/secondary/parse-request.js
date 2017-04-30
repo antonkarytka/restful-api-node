@@ -1,5 +1,4 @@
 const create = require('../crud/create');
-const read = require('../crud/read');
 const update = require('../crud/update');
 const del = require('../crud/delete');
 

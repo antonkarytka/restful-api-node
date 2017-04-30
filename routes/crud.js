@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const parseRequest = require('../models/secondary/parse-request');
+const read = require('../models/crud/read');
 const show = require('../models/secondary/show');
 
 router.post('/', async(req, res) => {
@@ -13,18 +14,33 @@ router.post('/', async(req, res) => {
 });
 
 router.get('/clubs', async(req, res) => {
-    let clubs = await show.clubs();
-    res.send(clubs);
+    res.send(await show.clubs());
+});
+
+router.get('/clubs/:id', async(req, res) => {
+    let url = req.originalUrl;
+    let clubId = url.split('/').pop();
+    res.send(await read.club(clubId));
 });
 
 router.get('/players', async(req, res) => {
-    let players = await show.players();
-    res.send(players);
+    res.send(await show.players());
+});
+
+router.get('/players/:id', async(req, res) => {
+    let url = req.originalUrl;
+    let playerId = url.split('/').pop();
+    res.send(await read.player(playerId));
 });
 
 router.get('/doctors', async(req, res) => {
-    let doctors = await show.doctors();
-    res.send(doctors);
+    res.send(await show.doctors());
+});
+
+router.get('/doctors/:id', async(req, res) => {
+    let url = req.originalUrl;
+    let doctorId = url.split('/').pop();
+    res.send(await read.doctor(doctorId));
 });
 
 router.put('/', async(req, res) => {

@@ -4,78 +4,71 @@ const Player = orm.Player;
 const Doctor = orm.Doctor;
 
 module.exports = {
-    club : async(query, cb) => {
-        let clubName = JSON.parse(query);
-        let club = await Club.find({ where: { clubName: clubName } });
+    club : async(clubId) => {
+        let club = await Club.find({ where: { clubId: clubId } });
         if (club) {
             let clubInfo = '';
             let players = await club.getPlayers();
-            clubInfo += 'Players: ';
+            clubInfo += 'Players:\n';
             if (players.length > 0) {
                 for (let player of players)
-                    clubInfo += `${player.playerName}, `;
-                clubInfo = clubInfo.slice(0, -2);
+                    clubInfo += `- ${player.playerName} (${player.playerId})`;
                 clubInfo += '\n';
             } else {
-                clubInfo += 'none';
+                clubInfo += '- none';
                 clubInfo += '\n';
             };
 
             let doctors = await club.getDoctors();
-            clubInfo += 'Doctors: ';
+            clubInfo += 'Doctors:\n';
             if (doctors.length > 0) {
                 for (let doctor of doctors)
-                clubInfo += `${doctor.doctorName}, `;
-                clubInfo = clubInfo.slice(0, -2);
+                clubInfo += `- ${doctor.doctorName} (${doctor.doctorId})`;
                 clubInfo += '\n';
             } else {
-                clubInfo += 'none';
+                clubInfo += '- none';
             };
-            cb(clubInfo);
+            return clubInfo;
         } else {
-            cb('error');
+            return '';
         };
     },
 
-    player : async(query, cb) => {
-        let playerName = JSON.parse(query);
-        let player = await Player.find({ where: { playerName: playerName } });
+    player : async(playerId) => {
+        let player = await Player.find({ where: { playerId: playerId } });
         if (player) {
             let club = await player.getClub();
-            let playerInfo = `Club: ${club.clubName}\n`;
+            let playerInfo = `Club: ${club.clubName} (${club.clubId})\n`;
             let doctors = await player.getDoctors();
-            playerInfo += 'Doctors: ';
+            playerInfo += 'Doctors:\n';
             if (doctors.length > 0) {
                 for (let doctor of doctors)
-                    playerInfo += `${doctor.doctorName}, `;
-                playerInfo = playerInfo.slice(0, -2);
+                    playerInfo += `- ${doctor.doctorName} (${doctor.doctorId})`;
             } else {
-                playerInfo += 'none';
+                playerInfo += '- none';
             };
-            cb(playerInfo);
+            return playerInfo;
         } else {
-            cb('error');
+            return '';
         };
     },
 
-    doctor : async(query, cb) => {
-        let doctorName = JSON.parse(query);
-        let doctor = await Doctor.find({ where: { doctorName: doctorName } });
+    doctor : async(doctorId) => {
+        let doctor = await Doctor.find({ where: { doctorId: doctorId } });
         if (doctor) {
             let club = await doctor.getClub();
             let doctorInfo = `Club: ${club.clubName}\n`;
             let players = await doctor.getPlayers();
-            doctorInfo += 'Players: ';
+            doctorInfo += 'Players:\n';
             if (players.length > 0) {
                 for (let player of players)
-                    doctorInfo += `${player.playerName}, `;
-                doctorInfo = doctorInfo.slice(0, -2);
+                    doctorInfo += `- ${player.playerName} (${player.playerId})`;
             } else {
-                doctorInfo += 'none';
+                doctorInfo += '- none';
             };
-            cb(doctorInfo);
+            return doctorInfo;
         } else {
-            cb('error');
+            return '';
         };
     }
 }
