@@ -33,7 +33,7 @@ module.exports = {
         let doctors = await Doctor.findAll();
         if (doctors.length > 0) {
             for (let doctor of doctors)
-                doctorsList += `${doctor.doctorName} (${doctor.doctorId})\n`;
+                doctorsList += `- ${doctor.doctorName} (${doctor.doctorId})\n`;
         } else {
             doctorsList += 'none';
         };

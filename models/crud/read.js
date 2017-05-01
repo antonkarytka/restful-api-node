@@ -30,7 +30,7 @@ module.exports = {
             };
             return clubInfo;
         } else {
-            return '';
+            return 404;
         };
     },
 
@@ -49,7 +49,7 @@ module.exports = {
             };
             return playerInfo;
         } else {
-            return '';
+            return 404;
         };
     },
 
@@ -68,7 +68,7 @@ module.exports = {
             };
             return doctorInfo;
         } else {
-            return '';
+            return 404;
         };
     }
 }
