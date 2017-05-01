@@ -5,6 +5,7 @@ There are 3 models in the ORM:
 * football club
 * players
 * doctors
+
 They have the following references:
 * 1:N - football club : players   
 * 1:N - football club : doctors
@@ -17,7 +18,7 @@ The following HTTP Request Methods are supported:
 * PUT (update field)
 * DELETE (delete)
 
-## Request Content-Types
+## Request Content-Type
 Two content types of requests are supported:
 * JSON
 * XML
@@ -27,11 +28,13 @@ Two content types of requests are supported:
 ### GET
 * GET http://host/{entityType} - returns a **list** of existing objects of {entityType}
 * GET http://host/{entityType}/{entityId} - returns **info** about the object of {entityType} with {entityId}
-Supported entity types:
+
+Supported {entityType}:
 * clubs
 * players
 * doctors
-Entity ID is an int value.
+
+{entityId} is an int value.
 
 ### JSON
 #### POST club
