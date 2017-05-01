@@ -1,10 +1,25 @@
 const express = require('express');
 const router = express.Router();
 
-const parseRequest = require('../models/secondary/parse-request');
+const parseRequestJson = require('../models/secondary/parse-request-json');
+const parseRequestXml = require('../models/secondary/parse-request-xml');
 
 router.post('/', async(req, res) => {
-    let responseCode = await parseRequest.create(req.body);
+    let responseCode = 0;
+    let contentType = req.headers['content-type'];
+    switch (contentType) {
+        case 'application/json':
+            responseCode = await parseRequestJson.create(req.body);
+            break;
+        case 'application/xml':
+            responseCode = await parseRequestXml.create(req.body);
+            break;
+        case 'text/xml':
+            responseCode = await parseRequestXml.create(req.body);
+            break;
+        default:
+            res.status(409).send(`${contentType} content-type is not supported yet...`)
+    };
     if (responseCode == 200) {
         res.status(200).send('CREATE query completed successfully!');
     } else {
@@ -17,7 +32,21 @@ router.get('/', (req, res) => {
 });
 
 router.put('/', async(req, res) => {
-    let responseCode = await parseRequest.update(req.body);
+    let responseCode = 0;
+    let contentType = req.headers['content-type'];
+    switch (contentType) {
+        case 'application/json':
+            responseCode = await parseRequestJson.create(req.body);
+            break;
+        case 'application/xml':
+            responseCode = await parseRequestXml.create(req.body);
+            break;
+        case 'text/xml':
+            responseCode = await parseRequestXml.create(req.body);
+            break;
+        default:
+            res.status(409).send(`${contentType} content-type is not supported yet...`)
+    };
     if (responseCode == 200) {
         res.status(200).send('UPDATE query completed successfully!');
     } else {
@@ -26,7 +55,21 @@ router.put('/', async(req, res) => {
 });
 
 router.delete('/', async(req, res) => {
-    let responseCode = await parseRequest.delete(req.body);
+    let responseCode = 0;
+    let contentType = req.headers['content-type'];
+    switch (contentType) {
+        case 'application/json':
+            responseCode = await parseRequestJson.create(req.body);
+            break;
+        case 'application/xml':
+            responseCode = await parseRequestXml.create(req.body);
+            break;
+        case 'text/xml':
+            responseCode = await parseRequestXml.create(req.body);
+            break;
+        default:
+            res.status(409).send(`${contentType} content-type is not supported yet...`)
+    };
     if (responseCode == 200) {
         res.status(200).send('DELETE query completed successfully!');
     } else {

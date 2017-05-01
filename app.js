@@ -1,20 +1,22 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+require('body-parser-xml')(bodyParser);
 
-var index = require('./routes/index');
-var clubs = require('./routes/clubs');
-var players = require('./routes/players');
-var doctors = require('./routes/doctors');
+const index = require('./routes/index');
+const clubs = require('./routes/clubs');
+const players = require('./routes/players');
+const doctors = require('./routes/doctors');
 
-var app = express();
+const app = express();
 
 app.use(favicon(path.join(__dirname, 'public', 'node.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(bodyParser.xml());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
