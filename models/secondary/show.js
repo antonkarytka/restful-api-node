@@ -5,37 +5,25 @@ const Doctor = orm.Doctor;
 
 module.exports = {
     clubs : async() => {
-        let clubsList = 'Existing clubs:\n';
         let clubs = await Club.findAll();
-        if (clubs.length > 0) {
-            for (let club of clubs)
-                clubsList += `- ${club.clubName} (${club.clubId})\n`;
-        } else {
-            clubsList += 'none';
+        let clubsList = {
+            'clubs': clubs.map(club => { return `${club.clubName} (${club.clubId})` })
         };
         return clubsList;
     },
 
     players : async() => {
-        let playersList = 'Existing players:\n';
         let players = await Player.findAll();
-        if (players.length > 0) {
-            for (let player of players)
-                playersList += `- ${player.playerName} (${player.playerId})\n`;
-        } else {
-            playersList += 'none';
+        let playersList = {
+            'players': players.map(player => { return `${player.playerName} (${player.playerId})` })
         };
         return playersList;
     },
 
     doctors : async() => {
-        let doctorsList = 'Existing doctors:\n';
         let doctors = await Doctor.findAll();
-        if (doctors.length > 0) {
-            for (let doctor of doctors)
-                doctorsList += `- ${doctor.doctorName} (${doctor.doctorId})\n`;
-        } else {
-            doctorsList += 'none';
+        let doctorsList = {
+            'doctors': doctors.map(doctor => { return `${doctor.doctorName} (${doctor.doctorId})` })
         };
         return doctorsList;
     }
