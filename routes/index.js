@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const response = require('../models/secondary/response');
 const parseRequestJson = require('../models/secondary/parse-request-json');
 const parseRequestXml = require('../models/secondary/parse-request-xml');
 
@@ -18,17 +19,17 @@ router.post('/', async(req, res) => {
             responseCode = await parseRequestXml.create(req.body);
             break;
         default:
-            res.status(409).send(`${contentType} content-type is not supported yet...`)
+            res.status(409).send(response.form(req, `${contentType} content-type is not supported yet...`));
     };
     if (responseCode == 200) {
-        res.status(200).send('CREATE query completed successfully!');
+        res.status(200).send(response.form(req, 'CREATE query completed successfully!'));
     } else {
-        res.status(404).send('Error in query...');
+        res.status(404).send(response.form(req, 'Error in query...'));
     };
 });
 
 router.get('/', (req, res) => {
-    res.status(409).send('Requested page is unavailable. Please, try "/clubs", "/players", "/doctors".')
+    res.status(409).send(response.form(req, 'Requested page is unavailable. Please, try "/clubs", "/players", "/doctors".'));
 });
 
 router.put('/', async(req, res) => {
@@ -45,12 +46,12 @@ router.put('/', async(req, res) => {
             responseCode = await parseRequestXml.create(req.body);
             break;
         default:
-            res.status(409).send(`${contentType} content-type is not supported yet...`)
+            res.status(409).send(response.form(req, `${contentType} content-type is not supported yet...`));
     };
     if (responseCode == 200) {
-        res.status(200).send('UPDATE query completed successfully!');
+        res.status(200).send(response.form(req, 'UPDATE query completed successfully!'));
     } else {
-        res.status(404).send('Requested entity was not found...');
+        res.status(404).send(response.form(req, 'Requested entity was not found...'));
     };
 });
 
@@ -68,12 +69,12 @@ router.delete('/', async(req, res) => {
             responseCode = await parseRequestXml.create(req.body);
             break;
         default:
-            res.status(409).send(`${contentType} content-type is not supported yet...`)
+            res.status(409).send(response.form(req, `${contentType} content-type is not supported yet...`));
     };
     if (responseCode == 200) {
-        res.status(200).send('DELETE query completed successfully!');
+        res.status(200).send(response.form(req, 'DELETE query completed successfully!'));
     } else {
-        res.status(404).send('Requested entity was not found...');
+        res.status(404).send(response.form(req, 'Requested entity was not found...'));
     };
 });
 

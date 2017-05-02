@@ -7,26 +7,17 @@ module.exports = {
     club : async(clubId) => {
         let club = await Club.find({ where: { clubId: clubId } });
         if (club) {
-            let clubInfo = '';
             let players = await club.getPlayers();
-            clubInfo += 'Players:\n';
-            if (players.length > 0) {
-                for (let player of players)
-                    clubInfo += `- ${player.playerName} (${player.playerId})`;
-                clubInfo += '\n';
-            } else {
-                clubInfo += '- none';
-                clubInfo += '\n';
-            };
-
             let doctors = await club.getDoctors();
-            clubInfo += 'Doctors:\n';
-            if (doctors.length > 0) {
-                for (let doctor of doctors)
-                clubInfo += `- ${doctor.doctorName} (${doctor.doctorId})`;
-                clubInfo += '\n';
-            } else {
-                clubInfo += '- none';
+            let clubInfo = {
+                'id': club.clubId,
+                'name': club.clubName,
+                'players': {
+                    'player': players.map(player => { return `${player.playerName} (${player.playerId})` })
+                },
+                'doctors': {
+                    'doctor': doctors.map(doctor => { return `${doctor.doctorName} (${doctor.doctorId})` })
+                }
             };
             return clubInfo;
         } else {
@@ -38,14 +29,14 @@ module.exports = {
         let player = await Player.find({ where: { playerId: playerId } });
         if (player) {
             let club = await player.getClub();
-            let playerInfo = `Club: ${club.clubName} (${club.clubId})\n`;
             let doctors = await player.getDoctors();
-            playerInfo += 'Doctors:\n';
-            if (doctors.length > 0) {
-                for (let doctor of doctors)
-                    playerInfo += `- ${doctor.doctorName} (${doctor.doctorId})`;
-            } else {
-                playerInfo += '- none';
+            let playerInfo = {
+                'id': player.playerId,
+                'name': player.playerName,
+                'club': `${club.clubName} (${club.clubId})`,
+                'doctors': {
+                    'doctor': doctors.map(doctor => { return `${doctor.doctorName} (${doctor.doctorId})` })
+                }
             };
             return playerInfo;
         } else {
@@ -57,14 +48,14 @@ module.exports = {
         let doctor = await Doctor.find({ where: { doctorId: doctorId } });
         if (doctor) {
             let club = await doctor.getClub();
-            let doctorInfo = `Club: ${club.clubName}\n`;
             let players = await doctor.getPlayers();
-            doctorInfo += 'Players:\n';
-            if (players.length > 0) {
-                for (let player of players)
-                    doctorInfo += `- ${player.playerName} (${player.playerId})`;
-            } else {
-                doctorInfo += '- none';
+            let doctorInfo = {
+                'id': doctor.doctorId,
+                'name': doctor.doctorName,
+                'club': `${club.clubName} (${club.clubId})`,
+                'players': {
+                    'player': players.map(player => { return `${player.playerName} (${player.playerId})` })
+                }
             };
             return doctorInfo;
         } else {
