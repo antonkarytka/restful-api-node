@@ -1,18 +1,30 @@
 {
   "name": "restful-api-node",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
+  "version": "1.0.0",
+  "description": "Node.js RESTful API.",
+  "main": "server.js",
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "body-parser-xml": "^1.1.0",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
-    "express": "^4.15.2",
-    "morgan": "~1.8.1",
+    "http": "0.0.0",
     "sequelize": "^3.30.4",
-    "serve-favicon": "~2.4.2"
-  }
+    "url": "^0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karytka/restful-api-node.git"
+  },
+  "keywords": [
+    "node",
+    "rest",
+    "api"
+  ],
+  "author": "Anton Karytka",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/karytka/restful-api-node/issues"
+  },
+  "homepage": "https://github.com/karytka/restful-api-node#readme"
 }

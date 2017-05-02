@@ -128,7 +128,7 @@ module.exports = {
                 };
             }
             default:
-                return 404;
+                return 409;
         };
     }
 }
