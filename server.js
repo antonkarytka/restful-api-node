@@ -12,39 +12,34 @@ server.on('request', async(req, res) => {
         if (req.method == 'GET') {
             let response = await handleGetRequest.get(req);
             if (response != 404) {
-                res.writeHead(200);
-                res.write(response);
-                res.end();
+                await res.writeHead(200);
+                res.end(response);
             } else {
-                res.writeHead(404);
-                res.write('Requested entity was not found...');
-                res.end();
+                await res.writeHead(404);
+                res.end('Requested entity was not found...');
             }
         } else {
-            req.on('data', data => {
-                console.log(data.toString());
-                /*
-                let responseCode = await parseUrl.url(req);
+            req.on('data', async(body) => {
+                let responseCode = await parseUrl.url(req, body.toString());
                 switch (responseCode) {
-                case 200:
-                res.writeHead(200);
-                res.write('Operation completed successfully!');
-                res.end();
-                case 404:
-                res.writeHead(404);
-                res.write('Requested entity was not found...');
-                res.end();
-                case 409:
-                res.writeHead(409);
-                res.write('Probably, you made a mistake in a query...');
-                res.end();
-                };*/
+                    case 200: {
+                        await res.writeHead(200);
+                        res.end('Operation completed successfully!');
+                    }
+                    case 404: {
+                        await res.writeHead(404);
+                        res.end('Requested entity was not found...');
+                    }
+                    case 409: {
+                        await res.writeHead(409);
+                        res.end('Probably, you made a mistake in a query...');
+                    }
+                };
             });
         }
     } else {
-        res.writeHead(404);
-        res.write('Requested link is not valid...');
-        res.end();
+        await res.writeHead(404);
+        res.end('Requested link is not valid...');
     };
 });
 

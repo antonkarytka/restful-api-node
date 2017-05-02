@@ -5,24 +5,25 @@ const del = require('../crud/delete');
 module.exports = {
     create : async(requestBody) => {
         let query = [];
-        switch (Object.keys(requestBody.post)[0]) {
+        console.log(requestBody);
+        switch (Object.keys(requestBody)[0]) {
             case 'club': {
-                await create.club(requestBody.post.club);
+                await create.club(requestBody.club);
                 break;
             }
             case 'player': {
-                query.push(requestBody.post.player);
+                query.push(requestBody.player);
                 for (let i = 0; i < Object.keys(requestBody).length - 2; i++)
-                    query.push(requestBody.post.doctor);
-                query.push(requestBody.post.club);
+                    query.push(requestBody.doctor);
+                query.push(requestBody.club);
                 await create.player(query);
                 break;
             }
             case 'doctor': {
-                query.push(requestBody.post.doctor);
+                query.push(requestBody.doctor);
                 for (let i = 1; i < Object.keys(requestBody).length - 1; i++)
-                    query.push(requestBody.post.player);
-                query.push(requestBody.post.club);
+                    query.push(requestBody.player);
+                query.push(requestBody.club);
                 await create.doctor(query);
                 break;
             }
@@ -34,11 +35,11 @@ module.exports = {
 
     update : async(requestBody) => {
         let query = [];
-        switch (requestBody.put.field) {
+        switch (requestBody.field) {
             case 'club': {
                 if (Object.keys(requestBody)[1] == 'player') {
-                    query.push(requestBody.put.player);
-                    query.push(requestBody.put.newClub);
+                    query.push(requestBody.player);
+                    query.push(requestBody.newClub);
                     let responseCode = await update.playersClubField(query);
                     if (responseCode == 200) {
                         return 200;
@@ -46,8 +47,8 @@ module.exports = {
                         return 404;
                     };
                 } else if (Object.keys(requestBody)[1] == 'doctor') {
-                    query.push(requestBody.put.player);
-                    query.push(requestBody.put.newClub);
+                    query.push(requestBody.player);
+                    query.push(requestBody.newClub);
                     let responseCode = await update.doctorsClubField(query);
                     if (responseCode == 200) {
                         return 200;
@@ -57,18 +58,18 @@ module.exports = {
                 };
             }
             case 'player': {
-                query.push(requestBody.put.doctor);
-                if (requestBody.put.action == 'add') {
-                    query.push(requestBody.put.player);
+                query.push(requestBody.doctor);
+                if (requestBody.action == 'add') {
+                    query.push(requestBody.player);
                     let responseCode = await update.addPlayerToDoctor(query);
                     if (responseCode == 200) {
                         return 200;
                     } else {
                         return 404;
                     };
-                } else if (requestBody.put.action == 'delete') {
-                    query.push(requestBody.put.player);
-                    let responseCode = await update.deletePlayerFromDoctor(query);
+                } else if (requestBody.action == 'delete') {
+                    query.push(requestBody.player);
+                    let responseCode = await updatePlayerFromDoctor(query);
                     if (responseCode == 200) {
                         return 200;
                     } else {
@@ -77,18 +78,18 @@ module.exports = {
                 };
             }
             case 'doctor': {
-                query.push(requestBody.put.player);
-                if (requestBody.put.action == 'add') {
-                    query.push(requestBody.put.doctor);
+                query.push(requestBody.player);
+                if (requestBody.action == 'add') {
+                    query.push(requestBody.doctor);
                     let responseCode = await update.addDoctorToPlayer(query);
                     if (responseCode == 200) {
                         return 200;
                     } else {
                         return 404;
                     };
-                } else if (requestBody.put.action == 'delete') {
-                    query.push(requestBody.put.doctor);
-                    let responseCode = await update.deleteDoctorFromPlayer(query);
+                } else if (requestBody.action == 'delete') {
+                    query.push(requestBody.doctor);
+                    let responseCode = await updateDoctorFromPlayer(query);
                     if (responseCode == 200) {
                         return 200;
                     } else {
@@ -104,7 +105,7 @@ module.exports = {
     delete : async(requestBody) => {
         switch (Object.keys(requestBody)[0]) {
             case 'club': {
-                let responseCode = await del.club(requestBody.delete.club);
+                let responseCode = await del.club(requestBody.club);
                 if (responseCode == 200) {
                     return 200;
                 } else {
@@ -112,7 +113,7 @@ module.exports = {
                 };
             }
             case 'player': {
-                let responseCode = await del.player(requestBody.delete.player);
+                let responseCode = await del.player(requestBody.player);
                 if (responseCode == 200) {
                     return 200;
                 } else {
@@ -120,7 +121,7 @@ module.exports = {
                 };
             }
             case 'doctor': {
-                let responseCode = await del.doctor(requestBody.delete.doctor);
+                let responseCode = await del.doctor(requestBody.doctor);
                 if (responseCode == 200) {
                     return 200;
                 } else {
