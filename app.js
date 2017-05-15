@@ -7,9 +7,6 @@ const bodyParser = require('body-parser');
 require('body-parser-xml')(bodyParser);
 
 const index = require('./routes/index');
-const clubs = require('./routes/clubs');
-const players = require('./routes/players');
-const doctors = require('./routes/doctors');
 
 const app = express();
 
@@ -22,9 +19,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/clubs', clubs);
-app.use('/players', players);
-app.use('/doctors', doctors);
 
 app.use((req, res, next) => {
     let err = new Error('Not Found...');

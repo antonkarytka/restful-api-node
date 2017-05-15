@@ -13,10 +13,10 @@ They have the following references:
 
 ## Request Methods
 The following HTTP Request Methods are supported:
-* POST (create)
-* GET (read)
-* PUT (update field)
-* DELETE (delete)
+* POST (create object, add relation)
+* GET (read object, read all objects)
+* PUT (edit object's field)
+* DELETE (delete object, delete relation)
 
 ## Request Content-Type
 Two content types of requests are supported:
@@ -25,149 +25,68 @@ Two content types of requests are supported:
 
 ## Request API
 
-### GET
-* GET http://host/{entityType} - returns a **list** of existing objects of {entityType}
-* GET http://host/{entityType}/{entityId} - returns **info** about the object of {entityType} with {entityId}
-
-Supported {entityType}:
-* clubs
-* players
-* doctors
-
-{entityId} is an int value.
-
-### JSON
-#### POST club
+### CREATE object
+```
+POST host/{entity}
+```
+**Creates** an **object** of {entity} type with the fields sent in the request body. Request body should contain object's fields. Request's body example:
 ```
 {
-  "club":"Club Name"
+  "name":"Object name"
 }
 ```
-#### POST player
 ```
-{
-  "player":"Player Name",
-  "doctor":"Doctor Name",  <-- from 1 to N times
-  "club":"Club Name"
-}
-```
-#### POST doctor
-```
-{
-  "doctor":"Doctor Name",
-  "player":"Player Name",  <-- from 1 to N
-  "club":"Club Name"
-}
-```
-#### PUT club field
-```
-{
-  "field":"club",
-  "player":"Player Name",  <-- can be "doctor"
-  "newClub":"New Club Name"
-}
-```
-#### PUT player field
-```
-{
-  "field":"player",
-  "doctor":"Doctor Name",
-  "action":"add",  <-- action can be "delete"
-  "player":"Player Name"
-}
-```
-#### PUT doctor field
-```
-{
-  "field":"doctor",
-  "player":"Player Name",
-  "action":"add",  <-- action can be "delete"
-  "doctor":"Doctor Name"
-}
-```
-#### DELETE club
-```
-{
-  "club":"Club Name"
-}
-```
-#### DELETE player
-```
-{
-  "player":"Player Name"
-}
-```
-#### DELETE doctor
-```
-{
-  "doctor":"Doctor Name"
-}
+<name>Object name</name>
 ```
 
-### XML
-#### POST club
+### READ all objects of one type
 ```
-<post>
-  <club>Club Name</club>
-</post>
+GET host/{entity}
 ```
-#### POST player
+**Returns** a **list** of existing objects of {entity} type.
+No request body needed.
+
+### READ object by id
 ```
-<post>
-  <player>Player Name</player>
-  <doctor>Doctor Name</doctor>  <-- from 1 to N
-  <club>Club Name</club>
-<post>
+GET host/{entity}/{objectId}
 ```
-#### POST doctor
+**Returns info** about the object of {entity} type with {objectId} id.
+No request body needed.
+
+### UPDATE object's fields
 ```
-<post>
-  <doctor>Doctor Name</doctor>
-  <player>Player Name</player>  <-- from 1 to N
-  <club>Club Name</club>
-</post>
+PUT host/{entity}/{objectId}
 ```
-#### PUT club field
+**Updates** all the **fields**, sent in request body, of an object of {entity} type with {objectId} id. Request's body example:
 ```
-<put>
-  <field>club</field>
-  <player>Player Name</player>  <-- can be "doctor"
-  <newClub>New Club Name</newClub>
-<put>
+{
+  "name":"New object's name"
+}
 ```
-#### PUT player field
 ```
-<put>
-  <field>player</field>
-  <doctor>Doctor Name</doctor>
-  <action>add</action>  <-- action can be "delete"
-  <player>Player Name</player>
-</put>
+<name>New object's name</name>
 ```
-#### PUT doctor field
+
+#### ADD relation
 ```
-<put>
-  <field>doctor</field>
-  <player>Player Name</player>
-  <action>add</action>  <-- action can be "delete"
-  <doctor>Doctor Name</doctor>
-</put>
+POST host/{firstEntity}/{firstObjectId}/{secondEntity}/{secondObjectId}
 ```
-#### DELETE club
+**Links** two objects - of {firstEntity} type with {firstObjectId} and of {secondEntity} type with {secondObjectId}.
+No request body needed.
+
+#### DELETE relation
 ```
-<delete>
-  <club>Club Name</club>
-</delete>
+DELETE host/{firstEntity}/{firstObjectId}/{secondEntity}/{secondObjectId}
 ```
-#### DELETE player
+**Deletes relation** between two objects - of {firstEntity} type with {firstObjectId} and of {secondEntity} type with {secondObjectId}.
+No request body needed.
+
+#### DELETE object
 ```
-<delete>
-  <player>Player Name</player>
-</delete>
+DELETE host/{entity}/{objectId}
 ```
-#### DELETE doctor
-```
-<delete>
-  <doctor>Doctor Name</doctor>
-</delete>
-```
+**Deletes** an **object** of {entity} type with {objectId} id.
+No request body needed.
+
+
+Entities can be added by **defining a model** in /orm/orm.js and creating an appropriate function in /models/read.js. 

@@ -15,8 +15,7 @@ const Club = sequelize.define('club', {
         autoIncrement: true
     },
     name: {
-        type: Sequelize.TEXT,
-        unique: true
+        type: Sequelize.TEXT
     }
 });
 
@@ -28,8 +27,7 @@ const Player = sequelize.define('player', {
         autoIncrement: true
     },
     name: {
-        type: Sequelize.TEXT,
-        unique: true
+        type: Sequelize.TEXT
     }
 });
 
@@ -41,8 +39,7 @@ const Doctor = sequelize.define('doctor', {
         autoIncrement: true
     },
     name: {
-        type: Sequelize.TEXT,
-        unique: true
+        type: Sequelize.TEXT
     }
 });
 

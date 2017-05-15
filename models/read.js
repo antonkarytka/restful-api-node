@@ -4,7 +4,7 @@ const Player = orm.Player;
 const Doctor = orm.Doctor;
 
 module.exports = {
-    club : async(clubId) => {
+    clubs : async(clubId) => {
         let club = await Club.find({ where: { id: clubId } });
         if (club) {
             let players = await club.getPlayers();
@@ -12,12 +12,8 @@ module.exports = {
             let clubInfo = {
                 'id': club.id,
                 'name': club.name,
-                'players': {
-                    'player': players.map(player => { return `${player.name} (${player.id})` })
-                },
-                'doctors': {
-                    'doctor': doctors.map(doctor => { return `${doctor.name} (${doctor.id})` })
-                }
+                'players': players.map(player => { return `${player.name} (${player.id})` }),
+                'doctors': doctors.map(doctor => { return `${doctor.name} (${doctor.id})` })
             };
             return clubInfo;
         } else {
@@ -25,7 +21,7 @@ module.exports = {
         };
     },
 
-    player : async(playerId) => {
+    players : async(playerId) => {
         let player = await Player.find({ where: { id: playerId } });
         if (player) {
             let club = await player.getClub();
@@ -33,20 +29,17 @@ module.exports = {
             let clubName = '';
             let clubId = '';
             if (club == null) {
-                console.log('heyehey');
                 clubName = '';
                 clubId = '';
             } else {
                 clubName = club.name;
                 clubId = club.id;
-            }
+            };
             let playerInfo = {
                 'id': player.id,
                 'name': player.name,
                 'club': `${clubName} (${clubId})`,
-                'doctors': {
-                    'doctor': doctors.map(doctor => { return `${doctor.name} (${doctor.id})` })
-                }
+                'doctors': doctors.map(doctor => { return `${doctor.name} (${doctor.id})` })
             };
             return playerInfo;
         } else {
@@ -54,32 +47,29 @@ module.exports = {
         };
     },
 
-    doctor : async(doctorId) => {
+    doctors : async(doctorId) => {
         let doctor = await Doctor.find({ where: { id: doctorId } });
         if (doctor) {
             let club = await doctor.getClub();
             let players = await doctor.getPlayers();
+            let clubName = '';
+            let clubId = '';
+            if (club == null) {
+                clubName = '';
+                clubId = '';
+            } else {
+                clubName = club.name;
+                clubId = club.id;
+            };
             let doctorInfo = {
                 'id': doctor.id,
                 'name': doctor.name,
-                'club': `${club.name} (${club.id})`,
-                'players': {
-                    'player': players.map(player => { return `${player.name} (${player.id})` })
-                }
+                'club': `${clubName} (${clubId})`,
+                'players': players.map(player => { return `${player.name} (${player.id})` })
             };
             return doctorInfo;
         } else {
             return 404;
         };
-    },
-
-    allObjects : async(entityNamePlural) => {
-        let entityNameSingular = entityNamePlural.slice(0, -1);
-        modelName = entityNameSingular.charAt(0).toUpperCase() + entityNameSingular.slice(1);
-        let objects = await orm[modelName].findAll();
-        let objectsList = {
-            [`${entityNameSingular}`]: objects.map(object => { return `${object.name} (${object.id})` })
-        };
-        return objectsList;
     }
 }
