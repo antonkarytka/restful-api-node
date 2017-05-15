@@ -1,5 +1,5 @@
-const methodUrl = {
-    'GET': new RegExp(/^\/(\bclubs\b|\bplayers\b|\bdoctors\b)(\/[0-9]+)*/),
+const acceptableUrls = {
+    'GET': new RegExp(/^\/([a-zA-Z]+){1}(\/[0-9]+)?/),
     'POST': new RegExp(/^[/]+$/),
     'PUT': new RegExp(/^[/]+$/),
     'DELETE': new RegExp(/^[/]+$/)
@@ -7,7 +7,7 @@ const methodUrl = {
 
 module.exports = {
     url : (method, url) => {
-        if (url.match(methodUrl[method])) {
+        if (url.match(acceptableUrls[method])) {
             return true;
         } else {
             return false;
