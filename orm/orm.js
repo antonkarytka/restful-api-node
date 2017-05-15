@@ -8,39 +8,39 @@ const sequelize = new Sequelize('footballClub.sqlite', null, null, {
 });
 
 const Club = sequelize.define('club', {
-    clubId: {
+    id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    clubName: {
+    name: {
         type: Sequelize.TEXT,
         unique: true
     }
 });
 
 const Player = sequelize.define('player', {
-    playerId: {
+    id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    playerName: {
+    name: {
         type: Sequelize.TEXT,
         unique: true
     }
 });
 
 const Doctor = sequelize.define('doctor', {
-    doctorId: {
+    id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    doctorName: {
+    name: {
         type: Sequelize.TEXT,
         unique: true
     }
@@ -55,6 +55,7 @@ Doctor.belongsToMany(Player, {through: 'PlayersDoctors'});
 
 sequelize.sync();
 
+module.exports.sequelize = sequelize;
 module.exports.Club = Club;
 module.exports.Player = Player;
 module.exports.Doctor = Doctor;

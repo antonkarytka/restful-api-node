@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const read = require('../models/crud/read');
-const show = require('../models/secondary/show');
+const read = require('../models/read');
 const response = require('../models/secondary/response');
-
-router.get('/', async(req, res) => {
-    res.send(await show.players());
-});
 
 router.get('/:id', async(req, res) => {
     let url = req.originalUrl;
