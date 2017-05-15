@@ -95,13 +95,17 @@ module.exports = {
         if (await entityExists(firstEntity) && (await entityExists(secondEntity))) {
             let firstModel = convertToOrmModel(firstEntity);
             let secondModel = convertToOrmModel(secondEntity);
-            let firstEntity = await orm[firstModel].find({ where: { id: firstObjectId } });
-            let secondEntity = await orm[secondModel].find({ where: { id: secondObjectId } });
-            if (firstEntity && secondEntity) {
-                let entities = await firstEntity[`get${secondModel}s`]();
-                let deletionIndex = entities.indexOf(firstEntity.name);
-                entities.splice(deletionIndex, 1);
-                await firstEntity[`set${secondModel}s`](entities);
+            let firstObject = await orm[firstModel].find({ where: { id: firstObjectId } });
+            let secondObject = await orm[secondModel].find({ where: { id: secondObjectId } });
+            if (firstObject && secondObject) {
+                try {
+                    let entities = await firstObject[`get${secondModel}s`]();
+                    let deletionIndex = entities.indexOf(firstObject.name);
+                    entities.splice(deletionIndex, 1);
+                    await firstObject[`set${secondModel}s`](entities);
+                } catch (e) {
+                    await firstObject[`set${secondModel}`](null);
+                };
                 return 200;
             } else {
                 return 404;
