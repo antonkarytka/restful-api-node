@@ -3,7 +3,6 @@ const read = require('./read');
 
 module.exports = {
     createObject: async(entity, objectName) => {
-        objectName = objectName.name;
         if (await entityExists(entity)) {
             let model = convertToOrmModel(entity);
             let objectFound = await orm[model].find({ where: { name: objectName } });
@@ -100,10 +99,7 @@ module.exports = {
             let secondObject = await orm[secondModel].find({ where: { id: secondObjectId } });
             if (firstObject && secondObject) {
                 try {
-                    let entities = await firstObject[`get${secondModel}s`]();
-                    let deletionIndex = entities.indexOf(firstObject.name);
-                    entities.splice(deletionIndex, 1);
-                    await firstObject[`set${secondModel}s`](entities);
+                    await firstObject[`remove${secondModel}`](secondObject);
                 } catch (e) {
                     await firstObject[`set${secondModel}`](null);
                 };
