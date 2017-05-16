@@ -5,13 +5,8 @@ module.exports = {
     createObject: async(entity, objectName) => {
         if (await entityExists(entity)) {
             let model = convertToOrmModel(entity);
-            let objectFound = await orm[model].find({ where: { name: objectName } });
-            if (!objectFound) {
-                await orm[model].create({ name: objectName });
-                return 200;
-            } else {
-                return 409;
-            };
+            await orm[model].create({ name: objectName });
+            return 200;
         } else {
             return 404;
         };
@@ -99,10 +94,7 @@ module.exports = {
             let secondObject = await orm[secondModel].find({ where: { id: secondObjectId } });
             if (firstObject && secondObject) {
                 try {
-                    let entities = await firstObject[`get${secondModel}s`]();
-                    let deletionIndex = entities.indexOf(firstObject.name);
-                    entities.splice(deletionIndex, 1);
-                    await firstObject[`set${secondModel}s`](entities);
+                    await firstObject[`remove${secondModel}`](secondObject);
                 } catch (e) {
                     await firstObject[`set${secondModel}`](null);
                 };

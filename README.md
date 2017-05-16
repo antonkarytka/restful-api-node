@@ -29,7 +29,8 @@ Two content types of requests are supported:
 ```
 POST host/{entity}
 ```
-**Creates** an **object** of {entity} type with the fields sent in the request body. Request body should contain object's fields. Request's body example:
+Creates an object of {entity} type with the fields sent in the request body. Request body should contain object's fields.  
+Request's body example:
 ```
 {
   "name":"Object name"
@@ -43,21 +44,22 @@ POST host/{entity}
 ```
 GET host/{entity}
 ```
-**Returns** a **list** of existing objects of {entity} type.
-No request body needed.
+Returns a list of existing objects of {entity} type.  
+No request body needed.  
 
 ### READ object by id
 ```
 GET host/{entity}/{objectId}
 ```
-**Returns info** about the object of {entity} type with {objectId} id.
-No request body needed.
+Returns info about the object of {entity} type with {objectId} id.  
+No request body needed.  
 
 ### UPDATE object's fields
 ```
 PUT host/{entity}/{objectId}
 ```
-**Updates** all the **fields**, sent in request body, of an object of {entity} type with {objectId} id. Request's body example:
+Updates all the fields, sent in request body, of an object of {entity} type with {objectId} id.  
+Request's body example:
 ```
 {
   "name":"New object's name"
@@ -67,26 +69,25 @@ PUT host/{entity}/{objectId}
 <name>New object's name</name>
 ```
 
-#### ADD relation
+### ADD relation
 ```
 POST host/{firstEntity}/{firstObjectId}/{secondEntity}/{secondObjectId}
 ```
-**Links** two objects - of {firstEntity} type with {firstObjectId} and of {secondEntity} type with {secondObjectId}.
+Links two objects - of {firstEntity} type with {firstObjectId} and of {secondEntity} type with {secondObjectId}.  
 No request body needed.
 
-#### DELETE relation
+### DELETE relation
 ```
 DELETE host/{firstEntity}/{firstObjectId}/{secondEntity}/{secondObjectId}
 ```
-**Deletes relation** between two objects - of {firstEntity} type with {firstObjectId} and of {secondEntity} type with {secondObjectId}.
-No request body needed.
+Deletes relation between two objects - of {firstEntity} type with {firstObjectId} and of {secondEntity} type with {secondObjectId}.  
+No request body needed.  
 
-#### DELETE object
+### DELETE object
 ```
 DELETE host/{entity}/{objectId}
 ```
-**Deletes** an **object** of {entity} type with {objectId} id.
-No request body needed.
+Deletes an object of {entity} type with {objectId} id.  
+No request body needed.    <br/>
 
-
-Entities can be added by **defining a model** in /orm/orm.js and creating an appropriate function in /models/read.js. 
+Entities can be added by defining a model in /orm/orm.js and creating an appropriate function in /models/read.js.

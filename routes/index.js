@@ -12,8 +12,6 @@ router.post('/:entity', async(req, res) => {
     let responseCode = await crud.createObject(entityType, entityName);
     if (responseCode == 200) {
         res.status(200).send(formResponse(req, `${entityName} has been created successfully!`));
-    } else if (responseCode == 409) {
-        res.status(409).send(formResponse(req, `${entityName} already exists...`));
     } else {
         res.status(404).send(formResponse(req, `${entityType} does not exist...`));
     };
