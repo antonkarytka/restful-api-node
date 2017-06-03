@@ -7,9 +7,9 @@ const crud = require('../models/crud');
 const read = require('../models/read');
 
 router.post('/:entity', async(req, res) => {
-    let entityType = req.params.entity;
-    let entityName = req.body.name;
-    let responseCode = await crud.createObject(entityType, entityName);
+    const entityType = req.params.entity;
+    const entityName = req.body.name;
+    const responseCode = await crud.createObject(entityType, entityName);
     if (responseCode == 200) {
         res.status(200).send(formResponse(req, `${entityName} has been created successfully!`));
     } else {
@@ -18,11 +18,11 @@ router.post('/:entity', async(req, res) => {
 });
 
 router.post('/:firstEntity/:firstObjectId/:secondEntity/:secondObjectId', async(req, res) => {
-    let firstEntity = req.params.firstEntity;
-    let firstObjectId = req.params.firstObjectId;
-    let secondEntity = req.params.secondEntity;
-    let secondObjectId = req.params.secondObjectId;
-    let responseCode = await crud.addRelation(firstEntity, firstObjectId, secondEntity, secondObjectId);
+    const firstEntity = req.params.firstEntity;
+    const firstObjectId = req.params.firstObjectId;
+    const secondEntity = req.params.secondEntity;
+    const secondObjectId = req.params.secondObjectId;
+    const responseCode = await crud.addRelation(firstEntity, firstObjectId, secondEntity, secondObjectId);
     if (responseCode == 200) {
         res.status(200).send(formResponse(req, 'Relation has been added successfully!'));
     } else {
@@ -31,8 +31,8 @@ router.post('/:firstEntity/:firstObjectId/:secondEntity/:secondObjectId', async(
 });
 
 router.get('/:entity', async(req, res) => {
-    let entity = req.params.entity;
-    let response = await crud.readAllEntityObjects(entity);
+    const entity = req.params.entity;
+    const response = await crud.readAllEntityObjects(entity);
     if (response != 404) {
         await res.status(200).send(formResponse(req, response));
     } else {
@@ -41,9 +41,9 @@ router.get('/:entity', async(req, res) => {
 });
 
 router.get('/:entity/:id', async(req, res) => {
-    let entity = req.params.entity;
-    let id = req.params.id;
-    let response = await crud.readObject(entity, id);
+    const entity = req.params.entity;
+    const id = req.params.id;
+    const response = await crud.readObject(entity, id);
     if (response != 404) {
         await res.status(200).send(formResponse(req, response));
     } else {
@@ -52,10 +52,10 @@ router.get('/:entity/:id', async(req, res) => {
 });
 
 router.put('/:entity/:id', async(req, res) => {
-    let entity = req.params.entity;
-    let id = req.params.id;
-    let reqBody = req.body;
-    let responseCode = await crud.updateObjectFields(entity, id, reqBody);
+    const entity = req.params.entity;
+    const id = req.params.id;
+    const reqBody = req.body;
+    const responseCode = await crud.updateObjectFields(entity, id, reqBody);
     if (responseCode == 200) {
         await res.status(200).send(formResponse(req, 'Object has been updated successfully!'));
     } else if (responseCode == 409) {
@@ -66,9 +66,9 @@ router.put('/:entity/:id', async(req, res) => {
 });
 
 router.delete('/:entity/:id', async(req, res) => {
-    let entityType = req.params.entity;
-    let entityId = req.params.id;
-    let responseCode = await crud.deleteObject(entityType, entityId);
+    const entityType = req.params.entity;
+    const entityId = req.params.id;
+    const responseCode = await crud.deleteObject(entityType, entityId);
     if (responseCode == 200) {
         res.status(200).send(formResponse(req, `Object has been deleted successfully!`));
     } else if (responseCode == 409) {
@@ -79,11 +79,11 @@ router.delete('/:entity/:id', async(req, res) => {
 });
 
 router.delete('/:firstEntity/:firstObjectId/:secondEntity/:secondObjectId', async(req, res) => {
-    let firstEntity = req.params.firstEntity;
-    let firstObjectId = req.params.firstObjectId;
-    let secondEntity = req.params.secondEntity;
-    let secondObjectId = req.params.secondObjectId;
-    let responseCode = await crud.deleteRelation(firstEntity, firstObjectId, secondEntity, secondObjectId);
+    const firstEntity = req.params.firstEntity;
+    const firstObjectId = req.params.firstObjectId;
+    const secondEntity = req.params.secondEntity;
+    const secondObjectId = req.params.secondObjectId;
+    const responseCode = await crud.deleteRelation(firstEntity, firstObjectId, secondEntity, secondObjectId);
     if (responseCode == 200) {
         res.status(200).send(formResponse(req, 'Relation has been deleted successfully!'));
     } else {

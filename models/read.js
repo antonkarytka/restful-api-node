@@ -5,11 +5,11 @@ const Doctor = orm.Doctor;
 
 module.exports = {
     clubs : async(clubId) => {
-        let club = await Club.find({ where: { id: clubId } });
+        const club = await Club.find({ where: { id: clubId } });
         if (club) {
-            let players = await club.getPlayers();
-            let doctors = await club.getDoctors();
-            let clubInfo = {
+            const players = await club.getPlayers();
+            const doctors = await club.getDoctors();
+            const clubInfo = {
                 'id': club.id,
                 'name': club.name,
                 'players': players.map(player => { return `${player.name} (${player.id})` }),
@@ -22,10 +22,10 @@ module.exports = {
     },
 
     players : async(playerId) => {
-        let player = await Player.find({ where: { id: playerId } });
+        const player = await Player.find({ where: { id: playerId } });
         if (player) {
-            let club = await player.getClub();
-            let doctors = await player.getDoctors();
+            const club = await player.getClub();
+            const doctors = await player.getDoctors();
             let clubName = '';
             let clubId = '';
             if (club == null) {
@@ -35,7 +35,7 @@ module.exports = {
                 clubName = club.name;
                 clubId = club.id;
             };
-            let playerInfo = {
+            const playerInfo = {
                 'id': player.id,
                 'name': player.name,
                 'club': `${clubName} (${clubId})`,
@@ -48,10 +48,10 @@ module.exports = {
     },
 
     doctors : async(doctorId) => {
-        let doctor = await Doctor.find({ where: { id: doctorId } });
+        const doctor = await Doctor.find({ where: { id: doctorId } });
         if (doctor) {
-            let club = await doctor.getClub();
-            let players = await doctor.getPlayers();
+            const club = await doctor.getClub();
+            const players = await doctor.getPlayers();
             let clubName = '';
             let clubId = '';
             if (club == null) {
@@ -61,7 +61,7 @@ module.exports = {
                 clubName = club.name;
                 clubId = club.id;
             };
-            let doctorInfo = {
+            const doctorInfo = {
                 'id': doctor.id,
                 'name': doctor.name,
                 'club': `${clubName} (${clubId})`,
