@@ -5,8 +5,8 @@ module.exports = {
     createObject: async(entity, objectName) => {
         if (await entityExists(entity)) {
             const model = convertToOrmModel(entity);
-            await orm[model].create({ name: objectName });
-            return 200;
+            const createdObject = await orm[model].create({ name: objectName });
+            return createdObject.id;
         } else {
             return 404;
         };
@@ -30,7 +30,7 @@ module.exports = {
             const model = entitySingular.charAt(0).toUpperCase() + entitySingular.slice(1);
             const objects = await orm[model].findAll();
             const objectsList = {
-                [`${entity}`]: objects.map(object => { return `${object.name} (${object.id})` })
+                [`${entity}`]: objects.map(object => { return `${object.name} : /${entity}/${object.id}` })
             };
             return objectsList;
         } else {
