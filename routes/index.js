@@ -1,15 +1,18 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router();const halfred = require('halfred');
+
 
 const crud = require('../models/crud');
-const read = require('../models/read');
 
 router.post('/:entity', async(req, res) => {
     const entity = req.params.entity;
     const objectName = req.body.name;
     const objectId = await crud.createObject(entity, objectName);
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (objectId != 404) {
-        const response = await read[entity](objectId);
+        const response = await crud.readObject(entity, objectId);
         res.set('Content-Type', 'application/hal+json');
         res.status(200).send(response);
     } else {
@@ -25,7 +28,7 @@ router.post('/:firstEntity/:firstObjectId/:secondEntity/:secondObjectId', async(
     const secondObjectId = req.params.secondObjectId;
     const responseCode = await crud.addRelation(firstEntity, firstObjectId, secondEntity, secondObjectId);
     if (responseCode == 200) {
-        const response = await read[firstEntity](firstObjectId);
+        const response = await crud.readObject(firstEntity, firstObjectId);
         res.set('Content-Type', 'application/hal+json');
         res.status(200).send(response);
     } else {
@@ -37,6 +40,9 @@ router.post('/:firstEntity/:firstObjectId/:secondEntity/:secondObjectId', async(
 router.get('/:entity', async(req, res) => {
     const entity = req.params.entity;
     const response = await crud.readAllEntityObjects(entity);
+    
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (response != 404) {
         res.set('Content-Type', 'application/hal+json');
         res.status(200).send(response);
@@ -49,6 +55,9 @@ router.get('/:entity/:id', async(req, res) => {
     const entity = req.params.entity;
     const id = req.params.id;
     const response = await crud.readObject(entity, id);
+    
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.set('Content-Type', 'application/hal+json');
     if (response != 404) {
         await res.status(200).send(response);
@@ -63,7 +72,7 @@ router.put('/:entity/:id', async(req, res) => {
     const reqBody = req.body;
     const responseCode = await crud.updateObjectFields(entity, id, reqBody);
     if (responseCode == 200) {
-        const response = await read[entity](id);
+        const response = await crud.readObject(entity, id);
         res.set('Content-Type', 'application/hal+json');
         res.status(200).send(response);
     } else if (responseCode == 409) {
@@ -99,13 +108,21 @@ router.delete('/:firstEntity/:firstObjectId/:secondEntity/:secondObjectId', asyn
     const secondObjectId = req.params.secondObjectId;
     const responseCode = await crud.deleteRelation(firstEntity, firstObjectId, secondEntity, secondObjectId);
     if (responseCode == 200) {
-        const response = await read[firstEntity](firstObjectId);
+        const response = await crud.readObject(firstEntity, firstObjectId);
         res.set('Content-Type', 'application/hal+json');
         res.status(200).send(response);
     } else {
         res.set('Content-Type', 'application/json');
         res.status(404).send(JSON.stringify('Not found...'));
     };
+});
+
+router.get('/', async(req, res) => {
+    const entities = await crud.getEntities();
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.set('Content-Type', 'application/hal+json');
+    res.status(200).send(entities);
 });
 
 module.exports = router;

@@ -1,7 +1,25 @@
+const halson = require('halson');
+
 const orm = require('../orm/orm.js');
 const read = require('./read');
 
 module.exports = {
+    getEntities: async() => {
+        let entities = await orm.sequelize.query('SELECT name FROM sqlite_master WHERE type="table"');
+        let deletionIndex = entities.indexOf('sqlite_sequence');
+        entities.splice(deletionIndex, 1);
+        entities.map(entity => {
+            // delete many-to-many tables
+            if (entity[0] == entity[0].toUpperCase()) {
+                deletionIndex = entities.indexOf(entity);
+                entities.splice(deletionIndex, 1);
+            };
+        });
+        const response = halson();
+        entities.map(entity => response.addLink(`${entity}`, `/${entity}`) );
+        return response;
+    },
+
     createObject: async(entity, objectName) => {
         if (await entityExists(entity)) {
             const model = convertToOrmModel(entity);
@@ -29,10 +47,11 @@ module.exports = {
             const entitySingular = entity.slice(0, -1);
             const model = entitySingular.charAt(0).toUpperCase() + entitySingular.slice(1);
             const objects = await orm[model].findAll();
-            const objectsList = {
-                [`${entity}`]: objects.map(object => { return `${object.name} : /${entity}/${object.id}` })
-            };
-            return objectsList;
+            const response = halson();
+            objects.map(object => { 
+                response.addLink(`${object.name} (${object.id})`, `${entity}/${object.id}`); 
+            });
+            return response;
         } else {
             return 404;
         };
