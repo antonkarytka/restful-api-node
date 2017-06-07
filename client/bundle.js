@@ -286,6 +286,17 @@ class AjaxRequest {
         httpRequest.open(this.method, `${this.host}/${this.path}`);
         httpRequest.send();
     };
+
+    sendContent(content) {
+        const httpRequest = new XMLHttpRequest();
+        if (!httpRequest) {
+            return alert('Cannot create an XMLHTTP instance');
+        };
+
+        httpRequest.open(this.method, `${this.host}/${this.path}`);
+        httpRequest.setRequestHeader("Content-type", "application/json");
+        httpRequest.send(content);
+    };
 };
 
 
@@ -320,23 +331,34 @@ function createObjectsUL(entity, objects) {
         const button = document.createElement('button');
         button.innerHTML = key;
         button.onclick = () => {
-            const ajaxRequest = new AjaxRequest(getMethod(key.split(' ')[0]), `${objects[key][0].href}`);
-            ajaxRequest.getObjectInfo();
+            const keyword = key.split(' ')[0];
+            if (keyword == 'Create') {
+                const form = document.createElement('form');
+                const textarea = document.createElement('textarea');
+                textarea.autofocus = true;
+                textarea.cols = 30;
+                textarea.rows = 10;
+                textarea.value = '{\n\n}'
+                const submitButton = document.createElement('button'); 
+                submitButton.innerHTML = 'Submit';
+                submitButton.onclick = () => {
+                    const ajaxRequest = new AjaxRequest('POST', `${objects[key][0].href}`);
+                    ajaxRequest.sendContent(textarea.value);
+                };
+                form.appendChild(textarea);
+                form.appendChild(submitButton);
+                div.appendChild(form);
+            } else {
+                const ajaxRequest = new AjaxRequest(getMethod(key.split(' ')[0]), `${objects[key][0].href}`);
+                ajaxRequest.getObjectInfo();
+            };
         };
         const item = document.createElement('li');
         item.appendChild(button);
         unorderedList.appendChild(item);
     };
-    const button = document.createElement('button');
-    button.innerHTML = 'GO TO MAIN MENU';
-    button.onclick = () => {
-        const ajaxRequest = new AjaxRequest('GET', '')
-        ajaxRequest.getEntitiesList();
-    };
-    const item = document.createElement('li');
-    item.appendChild(button);
-    unorderedList.appendChild(item);
-    return unorderedList;
+    createGoToMainMenuButton(unorderedList);
+    return unorderedList;    
 };
 
 function createObjectPropertiesUL(fields, links) {
@@ -356,13 +378,37 @@ function createObjectPropertiesUL(fields, links) {
         const button = document.createElement('button');
         button.innerHTML = key;
         button.onclick = () => {
-            const ajaxRequest = new AjaxRequest(getMethod(key.split(' ')[0]), `${links[key][0].href}`);
-            ajaxRequest.getObjectInfo();
+            const keyword = key.split(' ')[0];
+            if (keyword == 'Update') {
+                const form = document.createElement('form');
+                const textarea = document.createElement('textarea');
+                textarea.autofocus = true;
+                textarea.cols = 30;
+                textarea.rows = 10;
+                textarea.value = '{\n\n}'
+                const submitButton = document.createElement('button'); 
+                submitButton.innerHTML = 'Submit';
+                submitButton.onclick = () => {
+                    const ajaxRequest = new AjaxRequest('PUT', `${links[key][0].href}`);
+                    ajaxRequest.sendContent(textarea.value);
+                };
+                form.appendChild(textarea);
+                form.appendChild(submitButton);
+                div.appendChild(form);
+            } else {
+                const ajaxRequest = new AjaxRequest(getMethod(keyword), `${links[key][0].href}`);
+                ajaxRequest.getObjectInfo();
+            };
         };
         const item = document.createElement('li');
         item.appendChild(button);
         unorderedList.appendChild(item);
     };
+    createGoToMainMenuButton(unorderedList);
+    return unorderedList;
+};
+
+function createGoToMainMenuButton(unorderedList) {
     const button = document.createElement('button');
     button.innerHTML = 'GO TO MAIN MENU';
     button.onclick = () => {
@@ -372,7 +418,6 @@ function createObjectPropertiesUL(fields, links) {
     const item = document.createElement('li');
     item.appendChild(button);
     unorderedList.appendChild(item);
-    return unorderedList;
 };
 
 function getMethod(keyword) {
