@@ -15,21 +15,23 @@ module.exports = {
                 'id': club.id,
                 'name': club.name
             });
-            clubInfo.addLink('Self', `clubs/${club.id}`);
-            players.map(player => clubInfo.addLink(`Related player: ${player.name} (${player.id})`, `players/${player.id}`));
-            doctors.map(doctor => clubInfo.addLink(`Related doctor: ${doctor.name} (${doctor.id})`, `doctors/${doctor.id}`));
-            clubInfo.addLink('Create : new club', `clubs`);
             clubInfo.addLink(`Update : ${club.name} (${club.id})`, `clubs/${club.id}`);
             clubInfo.addLink(`Delete : ${club.name} (${club.id})`, `clubs/${club.id}`);
+            players.map(player => clubInfo.addLink(`Related player: ${player.name} (${player.id})`, `players/${player.id}`));
+            doctors.map(doctor => clubInfo.addLink(`Related doctor: ${doctor.name} (${doctor.id})`, `doctors/${doctor.id}`));
             const allPlayers = await Player.findAll();
             allPlayers.map(player => {
-                clubInfo.addLink(`Add player : ${player.name}`, `clubs/${club.id}/players/${player.id}`);            
-                clubInfo.addLink(`Remove player : ${player.name}`, `clubs/${club.id}/players/${player.id}`);            
+                clubInfo.addLink(`Add player : ${player.name} (${player.id})`, `clubs/${club.id}/players/${player.id}`);            
+            });
+            players.map(player => {
+                clubInfo.addLink(`Remove player : ${player.name} (${player.id})`, `clubs/${club.id}/players/${player.id}`);            
             });
             const allDoctors = await Doctor.findAll();
             allDoctors.map(doctor => {
-                clubInfo.addLink(`Add doctor : ${doctor.name}`, `clubs/${club.id}/doctors/${doctor.id}`);            
-                clubInfo.addLink(`Remove doctor : ${doctor.name}`, `clubs/${club.id}/doctors/${doctor.id}`);            
+                clubInfo.addLink(`Add doctor : ${doctor.name} (${doctor.id})`, `clubs/${club.id}/doctors/${doctor.id}`);            
+            });
+            doctors.map(doctor => {
+                clubInfo.addLink(`Remove doctor : ${doctor.name} (${doctor.id})`, `clubs/${club.id}/doctors/${doctor.id}`);            
             });
 
             return clubInfo;
@@ -56,19 +58,25 @@ module.exports = {
                 'id': player.id,
                 'name': player.name
             });
-            playerInfo.addLink('Self', `players/${player.id}`);
-            playerInfo.addLink(`Club : ${clubName} (${clubId})`, `clubs/${clubId}`)
-            doctors.map(doctor => playerInfo.addLink(`Related doctor: ${player.name} (${player.id})`, `doctors/${doctor.id}`));            
-            playerInfo.addLink('Create : new player', `players`);
             playerInfo.addLink(`Update : ${player.name} (${player.id})`, `players/${player.id}`);
             playerInfo.addLink(`Delete : ${player.name} (${player.id})`, `players/${player.id}`);
-            const allClubs = Club.findAll();
+            if (club != null) {
+                playerInfo.addLink(`Related club : ${clubName} (${clubId})`, `clubs/${clubId}`)
+            };
+            doctors.map(doctor => { playerInfo.addLink(`Related doctor: ${doctor.name} (${doctor.id})`, `doctors/${doctor.id}`) });            
+            const allClubs = await Club.findAll();
+            if (club != null) {
+                const deletionIndex = allClubs.indexOf(club);
+                allClubs.splice(deletionIndex, 1);
+                playerInfo.addLink(`Remove club: ${club.name} (${club.id})`, `players/${player.id}/clubs/${club.id}`);
+            };
             allClubs.map(club => playerInfo.addLink(`Add club: ${club.name} (${club.id})`, `players/${player.id}/clubs/${club.id}`));
-            const allDoctors = Doctor.findAll();
-            // const availableDoctors = doctors.not(allDoctors).get();
+            const allDoctors = await Doctor.findAll();
             allDoctors.map(doctor => {
                 playerInfo.addLink(`Add doctor : ${doctor.name} (${doctor.id})`, `players/${player.id}/doctors/${doctor.id}`);            
-                playerInfo.addLink(`Remove doctor : ${doctor.name} (${doctor.id})`, `players/${player.id}/doctors/${doctor.id}`);    
+            });
+            doctors.map(doctor => {
+                playerInfo.addLink(`Remove doctor : ${doctor.name} (${doctor.id})`, `players/${player.id}/doctors/${doctor.id}`);            
             });
 
             return playerInfo;
@@ -95,18 +103,24 @@ module.exports = {
                 'id': doctor.id,
                 'name': doctor.name
             });
-            doctorInfo.addLink('Self', `doctors/${doctor.id}`);
-            doctorInfo.addLink(`Club : ${clubName} (${clubId})`, `clubs/${clubId}`)
-            players.map(player => doctorInfo.addLink(`Related player: ${player.name} (${player.id})`, `players/${player.id}`));
-            doctorInfo.addLink('Create : new doctor', `doctors`);
             doctorInfo.addLink(`Update : ${doctor.name} (${doctor.id})`, `doctors/${doctor.id}`);
             doctorInfo.addLink(`Delete : ${doctor.name} (${doctor.id})`, `doctors/${doctor.id}`);
-            const allClubs = Club.findAll();
+            if (club != null) {
+                doctorInfo.addLink(`Related club : ${clubName} (${clubId})`, `clubs/${clubId}`)
+            };
+            players.map(player => doctorInfo.addLink(`Related player: ${player.name} (${player.id})`, `players/${player.id}`));
+            const allClubs = await Club.findAll();
+            if (club != null) {
+                const deletionIndex = allClubs.indexOf(club);
+                allClubs.splice(deletionIndex, 1);
+                doctorInfo.addLink(`Remove club: ${club.name} (${club.id})`, `doctors/${doctor.id}/clubs/${club.id}`)
+            }
             allClubs.map(club => { doctorInfo.addLink(`Add club: ${club.name} (${club.id})`, `doctors/${doctor.id}/clubs/${club.id}`) });
-            const allPlayers = Player.findAll();
-            // const availablePlayers = players.not(allPlayers).get();
+            const allPlayers = await Player.findAll();
             allPlayers.map(player => {
                 doctorInfo.addLink(`Add player : ${player.name} (${player.id})`, `doctors/${doctor.id}/players/${player.id}`);            
+            });
+            players.map(player => {
                 doctorInfo.addLink(`Remove player : ${player.name} (${player.id})`, `doctors/${doctor.id}/players/${player.id}`);    
             });
             

@@ -311,22 +311,39 @@ function createEntitiesUL(entities) {
 };
 
 function createObjectsUL(entity, objects) {
+    const div = document.getElementById('div');
+    while (div.firstChild) {
+        div.removeChild(div.firstChild);
+    };
     const unorderedList = document.createElement('ul');
     for (let key in objects) {
         const button = document.createElement('button');
         button.innerHTML = key;
         button.onclick = () => {
-            const ajaxRequest = new AjaxRequest('GET', `${objects[key][0].href}`);
+            const ajaxRequest = new AjaxRequest(getMethod(key.split(' ')[0]), `${objects[key][0].href}`);
             ajaxRequest.getObjectInfo();
         };
         const item = document.createElement('li');
         item.appendChild(button);
         unorderedList.appendChild(item);
     };
+    const button = document.createElement('button');
+    button.innerHTML = 'GO TO MAIN MENU';
+    button.onclick = () => {
+        const ajaxRequest = new AjaxRequest('GET', '')
+        ajaxRequest.getEntitiesList();
+    };
+    const item = document.createElement('li');
+    item.appendChild(button);
+    unorderedList.appendChild(item);
     return unorderedList;
 };
 
 function createObjectPropertiesUL(fields, links) {
+    const div = document.getElementById('div');
+    while (div.firstChild) {
+        div.removeChild(div.firstChild);
+    };
     const unorderedList = document.createElement('ul');
     for (let key in fields) {
         const text = document.createTextNode(`${key}: ${fields[key]}`);
@@ -346,6 +363,15 @@ function createObjectPropertiesUL(fields, links) {
         item.appendChild(button);
         unorderedList.appendChild(item);
     };
+    const button = document.createElement('button');
+    button.innerHTML = 'GO TO MAIN MENU';
+    button.onclick = () => {
+        const ajaxRequest = new AjaxRequest('GET', '')
+        ajaxRequest.getEntitiesList();
+    };
+    const item = document.createElement('li');
+    item.appendChild(button);
+    unorderedList.appendChild(item);
     return unorderedList;
 };
 

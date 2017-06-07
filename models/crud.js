@@ -48,6 +48,7 @@ module.exports = {
             const model = entitySingular.charAt(0).toUpperCase() + entitySingular.slice(1);
             const objects = await orm[model].findAll();
             const response = halson();
+            response.addLink(`Create : new ${entitySingular}`, entity);
             objects.map(object => { 
                 response.addLink(`${object.name} (${object.id})`, `${entity}/${object.id}`); 
             });

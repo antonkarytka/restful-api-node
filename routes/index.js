@@ -8,9 +8,6 @@ router.post('/:entity', async(req, res) => {
     const entity = req.params.entity;
     const objectName = req.body.name;
     const objectId = await crud.createObject(entity, objectName);
-
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (objectId != 404) {
         const response = await crud.readObject(entity, objectId);
         res.set('Content-Type', 'application/hal+json');
@@ -40,9 +37,6 @@ router.post('/:firstEntity/:firstObjectId/:secondEntity/:secondObjectId', async(
 router.get('/:entity', async(req, res) => {
     const entity = req.params.entity;
     const response = await crud.readAllEntityObjects(entity);
-    
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (response != 404) {
         res.set('Content-Type', 'application/hal+json');
         res.status(200).send(response);
@@ -55,10 +49,6 @@ router.get('/:entity/:id', async(req, res) => {
     const entity = req.params.entity;
     const id = req.params.id;
     const response = await crud.readObject(entity, id);
-    
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.set('Content-Type', 'application/hal+json');
     if (response != 404) {
         await res.status(200).send(response);
     } else {
@@ -119,8 +109,6 @@ router.delete('/:firstEntity/:firstObjectId/:secondEntity/:secondObjectId', asyn
 
 router.get('/', async(req, res) => {
     const entities = await crud.getEntities();
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.set('Content-Type', 'application/hal+json');
     res.status(200).send(entities);
 });
